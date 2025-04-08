@@ -1,0 +1,8 @@
+[submodule "riscv-gnu-toolchain"]
+	path = riscv-gnu-toolchain
+	url = https://github.com/fontamsoc/riscv-gnu-toolchain.git
+	branch = rvpu
+[submodule "hw"]
+	path = hw
+	url = https://github.com/fontamsoc/hw.git
+	branch = rvpu

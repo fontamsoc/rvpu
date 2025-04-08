@@ -1,0 +1,38 @@
+on:
+  push:
+    tags:
+    - '*'
+  workflow_dispatch:
+
+name: rvpu-toolchain
+
+permissions: write-all
+
+jobs:
+  job0:
+    name: Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Build project
+        working-directory: ../
+        run: |
+          sudo ln -snf /bin/bash /bin/sh
+          sudo mount --bind /${PWD} /opt/
+          mkdir rvpu-build
+          make USETAR=1 -C rvpu-build/ -f ../rvpu/makefile all > rvpu/build.log
+          mv rvpu-build/rvpu-toolchain.tar.xz rvpu/
+      - name: Save build.log
+        uses: actions/upload-artifact@v4
+        with:
+          path: build.log
+          name: build.log
+          if-no-files-found: error
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            rvpu-toolchain.tar.xz
