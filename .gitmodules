@@ -1,0 +1,4 @@
+[submodule "riscv-gnu-toolchain"]
+	path = riscv-gnu-toolchain
+	url = https://github.com/fontamsoc/riscv-gnu-toolchain.git
+	branch = rvpu
