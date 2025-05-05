@@ -24,7 +24,7 @@ jobs:
           sudo mount --bind /${PWD} /opt/
           mkdir rvpu-build
           make USETAR=1 -C rvpu-build/ -f ../rvpu/makefile all > rvpu/build.log
-          mv rvpu-build/rvpu-toolchain.tar.xz rvpu/
+          mv rvpu-build/rvpu-toolchain.tar.xz rvpu/rvpu-toolchain-linux-x64.tar.xz
       - name: Save build.log
         uses: actions/upload-artifact@v4
         with:
@@ -35,4 +35,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            rvpu-toolchain.tar.xz
+            rvpu-toolchain-linux-x64.tar.xz
