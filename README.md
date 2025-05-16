@@ -152,7 +152,7 @@ The bitstreams for the xilinx FPGAs, such as `rv32-artya7100`, need to be built 
 
 ## Build toolchain (or [download prebuilt](https://github.com/fontamsoc/rvpu/releases/latest/download/rvpu-toolchain-linux-x64.tar.xz) [![pu32-toolchain](https://github.com/fontamsoc/rvpu/actions/workflows/release.yml/badge.svg)](https://github.com/fontamsoc/rvpu/actions/workflows/release.yml))
 
-Only needed to build software.
+Only needed in order to build software.
 
 	sudo ln -snf /bin/bash /bin/sh
 	mkdir rvpu-build && cd rvpu-build
