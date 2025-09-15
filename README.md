@@ -1,15 +1,24 @@
-RISC-V RTOS-enabled multi-core SoC with Wishbone4 peripherals.
+RISC-V RTOS-enabled multi-core SoC using Wishbone4 interconnect.
 
 CPU is a single-issue in-order 4 stages pipeline with branch-JAL-RET-prediction (BHT: 4096 entries, RAS: 8 entries).
 The stages are IF (Fetch) ID (Decode) EX (Execute) WB (WriteBack).
 Memory access is not considered a stage in the design, but just another late result that takes multiple cycles like division.
 
-Software toolchain includes libc with builtin RTOS named `_OS (underLineOS)` which implements preemptive multi-threading (SMP capable), sw-timer, mutex, semaphore, fifo.
+Software toolchain includes libc with builtin RTOS named `_OS (underLineOS)` which implements preemptive multi-threading (SMP capable load balanced per-cpu runqueue), sw-timer, mutex, semaphore, fifo.
 
 ## Get project:
 
 	git clone https://github.com/fontamsoc/rvpu.git
 	git -C rvpu/ submodule update --init
+
+## Get hw toolchain:
+
+	wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-09-15/oss-cad-suite-linux-x64-20250915.tgz
+	sudo tar -C /opt/ -xf oss-cad-suite-linux-x64-20250915.tgz
+	PATH="/opt/oss-cad-suite/bin:${PATH}"
+	sudo tee /etc/profile.d/fpga-toolchain.sh <<EOF
+	PATH="/opt/oss-cad-suite/bin:${PATH}"
+	EOF
 
 ## Run application using verilator simulator
 
@@ -150,7 +159,7 @@ To rebuild the `rv32-orangecrab0285` bitstream, use `make clean all`.
 
 The bitstreams for the xilinx FPGAs, such as `rv32-artya7100`, need to be built from their Vivado project file (ie: `rvpu/hw/rv32-artya7100/vivado2020/artya7100.xpr`).
 
-## Build toolchain (or [download prebuilt](https://github.com/fontamsoc/rvpu/releases/latest/download/rvpu-toolchain-linux-x64.tar.xz) [![pu32-toolchain](https://github.com/fontamsoc/rvpu/actions/workflows/release.yml/badge.svg)](https://github.com/fontamsoc/rvpu/actions/workflows/release.yml))
+## Build sw toolchain (or [download prebuilt](https://github.com/fontamsoc/rvpu/releases/latest/download/rvpu-toolchain-linux-x64.tar.xz) [![pu32-toolchain](https://github.com/fontamsoc/rvpu/actions/workflows/release.yml/badge.svg)](https://github.com/fontamsoc/rvpu/actions/workflows/release.yml))
 
 Only needed in order to build software.
 
@@ -160,7 +169,13 @@ Only needed in order to build software.
 
 The toolchain gets generated under `/opt/rvpu-toolchain/`.
 
-### > Install Toolchain if using downloaded prebuilt
+### > Install sw toolchain if using downloaded prebuilt
 
 	sudo tar -xf rvpu-toolchain-linux-x64.tar.xz -C /opt/
+
+### > Setup sw toolchain
+
 	PATH="/opt/rvpu-toolchain/bin:${PATH}"
+	sudo tee /etc/profile.d/rvpu-toolchain.sh <<EOF
+	PATH="/opt/rvpu-toolchain/bin:${PATH}"
+	EOF
