@@ -16,7 +16,7 @@ Software toolchain includes libc with builtin RTOS named `_OS (underLineOS)` whi
 	wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-09-15/oss-cad-suite-linux-x64-20250915.tgz
 	sudo tar -C /opt/ -xf oss-cad-suite-linux-x64-20250915.tgz
 	PATH="/opt/oss-cad-suite/bin:${PATH}"
-	sudo tee /etc/profile.d/fpga-toolchain.sh <<EOF
+	sudo tee /etc/profile.d/fpga-toolchain.sh <<'EOF'
 	PATH="/opt/oss-cad-suite/bin:${PATH}"
 	EOF
 
@@ -176,6 +176,6 @@ The toolchain gets generated under `/opt/rvpu-toolchain/`.
 ### > Setup sw toolchain
 
 	PATH="/opt/rvpu-toolchain/bin:${PATH}"
-	sudo tee /etc/profile.d/rvpu-toolchain.sh <<EOF
+	sudo tee /etc/profile.d/rvpu-toolchain.sh <<'EOF'
 	PATH="/opt/rvpu-toolchain/bin:${PATH}"
 	EOF
