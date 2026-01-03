@@ -29,7 +29,7 @@ A number of sample applications are available under `rvpu/hw/rv32-sim/apps/` alo
 ### > App coremark using 1 MHz clock frequency:
 
 	cd rvpu/hw/rv32-sim/
-	make clean sim run SRAM_INITFILE=apps/coremark/rv32/coremark.hex CLKFREQ=1000000
+	make clean sim run SRAM_INITFILE=apps/coremark/rv32/coremark.32.hex CLKFREQ=1000000
 	cd -
 
 Output:
@@ -42,40 +42,38 @@ Output:
 			--relative-includes -I.. -Wno-lint \
 			-DCLKFREQ=1000000 \
 			-DCPU_COUNT=1 \
-			-DSRAM_INITFILE='"apps/coremark/rv32/coremark.hex"' \
+			-DXWORDBITSZ=32 \
+			-DSRAM_INITFILE='"apps/coremark/rv32/coremark.32.hex"' \
 			-DSRAM_KBSIZE="(256/*KB*/)" \
-			sim.v sim.cpp &>>build.log
+			sim.sv sim.cpp &>>build.log
 	make[1]: Leaving directory '/tmp/rvpu/hw/rv32-sim'
-	Thu May  8 10:31:15 AM CDT 2025
-	apps/coremark/rv32/coremark.hex loaded
+	Fri Jan  2 07:42:46 PM CST 2026
+	apps/coremark/rv32/coremark.32.hex loaded
 	CoreMark @ 1000000 Hz
 	2K performance run parameters for coremark.
 	CoreMark Size    : 666
-	Total ticks      : 14019280
-	Total time (secs): 14.019280
-	Iterations/Sec   : 2.853214
+	Total ticks      : 12503368
+	Total time (secs): 12.503368
+	Iterations/Sec   : 3.199138
 	Iterations       : 40
-	Compiler version : GCC13.3.0
-	Compiler flags   : -O3 -DPERFORMANCE_RUN=1
-	Memory location  : STATIC
+	Compiler version : GCC13.4.0
+	Compiler flags   : -O3 -DMULTITHREAD=4 -DUSE__OS=1 -DPERFORMANCE_RUN=1
+	Parallel threads : 1
+	Memory location  : HEAP
 	seedcrc          : 0xe9f5
 	[0]crclist       : 0xe714
 	[0]crcmatrix     : 0x1fd7
 	[0]crcstate      : 0x8e3a
 	[0]crcfinal      : 0x65c5
 	Correct operation validated. See readme.txt for run and reporting rules.
-	CoreMark 1.0 : 2.853214 / GCC13.3.0 -O3 -DPERFORMANCE_RUN=1 / STATIC
+	CoreMark 1.0 : 3.199138 / GCC13.4.0 -O3 -DMULTITHREAD=4 -DUSE__OS=1 -DPERFORMANCE_RUN=1 / HEAP / 1:threads
 	CoreMark done
 	- /tmp/rvpu/hw/rvxx/sys.pu.v:227: Verilog $finish
-
-	real    0m15.618s
-	user    0m11.148s
-	sys     0m4.447s
 
 ### > App smp_pi using 4 cores:
 
 	cd rvpu/hw/rv32-sim/
-	make clean sim run SRAM_INITFILE=apps/smp_pi/smp_pi.hex CPU_COUNT=4
+	make clean sim run SRAM_INITFILE=apps/smp_pi/smp_pi.32.hex CPU_COUNT=4
 	cd -
 
 Output:
@@ -88,12 +86,13 @@ Output:
 			--relative-includes -I.. -Wno-lint \
 			-DCLKFREQ=100000000 \
 			-DCPU_COUNT=4 \
-			-DSRAM_INITFILE='"apps/smp_pi/smp_pi.hex"' \
+			-DXWORDBITSZ=32 \
+			-DSRAM_INITFILE='"apps/smp_pi/smp_pi.32.hex"' \
 			-DSRAM_KBSIZE="(256/*KB*/)" \
-			sim.v sim.cpp &>>build.log
+			sim.sv sim.cpp &>>build.log
 	make[1]: Leaving directory '/tmp/rvpu/hw/rv32-sim'
-	Thu May  8 10:35:13 AM CDT 2025
-	apps/smp_pi/smp_pi.hex loaded
+	Fri Jan  2 07:49:33 PM CST 2026
+	apps/smp_pi/smp_pi.32.hex loaded
 	Calculate first 240 digits of Pi independently by 16 threads.
 	Pi value calculated by thread #0: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	Pi value calculated by thread #1: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
@@ -111,17 +110,13 @@ Output:
 	Pi value calculated by thread #13: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	Pi value calculated by thread #14: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	Pi value calculated by thread #15: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
-	All 16 threads executed by 4 cores in 81 ms
+	All 16 threads executed by 4 cores in 80 ms
 	- /tmp/rvpu/hw/rvxx/sys.pu.v:227: Verilog $finish
-
-	real    0m17.259s
-	user    0m14.486s
-	sys     0m2.728s
 
 ### > App tinyraytracer using 4 cores:
 
 	cd rvpu/hw/rv32-sim/
-	make clean sim run SRAM_INITFILE=apps/tinyraytracer/tinyraytracer.hex CPU_COUNT=4
+	make clean sim run SRAM_INITFILE=apps/tinyraytracer/tinyraytracer.32.hex CPU_COUNT=4
 	cd -
 
 Output:
@@ -131,7 +126,7 @@ Output:
 ### > App donut:
 
 	cd rvpu/hw/rv32-sim/
-	make clean sim run SRAM_INITFILE=apps/donut/donut.hex
+	make clean sim run SRAM_INITFILE=apps/donut/donut.32.hex
 	cd -
 
 Output:
@@ -147,7 +142,7 @@ FPGA support is available under `rvpu/hw/`:
 The easiest FPGA support to work with is the `rv32-orangecrab0285` because its sram can be updated without rebuilding the bitstream:
 
 	cd rvpu/hw/rv32-orangecrab0285/yosys/
-	make updsram SRAM_INITFILE=../../rv32-sim/apps/coremark/rv32/coremark.hex
+	make updsram SRAM_INITFILE=../../rv32-sim/apps/coremark/rv32/coremark.32.hex
 	# While holding the button on the OrangeCrab, plug it in;
 	# it enters the bootloader and enables programming a new bitstream.
 	make prog
