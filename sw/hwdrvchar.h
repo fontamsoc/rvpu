@@ -1,17 +1,15 @@
 // SPDX-License-Identifier: GPL-2.0-only
-// 20250414 (c) William Fonkou Tambe
+// 20260420 (c) William Fonkou Tambe
 
 #ifndef HWDRVCHAR_H
 #define HWDRVCHAR_H
 
 // Structure representing a UART device.
 // Before initializing the device using hwdrvchar_init(),
-// the fields addr and chan must be valid.
+// the fields addr must be valid.
 typedef struct {
 	// Device address.
 	void *addr;
-	// Device channel.
-	uintptr_t chan;
 	// Size in bytes of the transmit and receive buffer.
 	uintptr_t bufsz;
 	// Clock frequency in Hz used by the device.
@@ -29,9 +27,10 @@ typedef struct {
 // The field dev->bufsz get initialized by this function.
 static void hwdrvchar_init (hwdrvchar_t *dev, uintptr_t baudrate) {
 
+	void* addrDat = dev->addr;
+	void* addrCmd = (addrDat + sizeof(uintptr_t));
+
 	uintptr_t dat;
-	void* addrDat = dev->addr + (dev->chan * sizeof(uintptr_t));
-	void* addrCmd = (addrDat + 64);
 
 	// Command HWDRVCHAR_CMDGETBUFFERUSAGE to retrieve
 	// the number of bytes in the UART transmit buffer.
@@ -45,9 +44,6 @@ static void hwdrvchar_init (hwdrvchar_t *dev, uintptr_t baudrate) {
 		dat = HWDRVCHAR_CMDDEVRDY;
 		dat = _xchg(addrCmd, dat);
 	} while ((intptr_t)dat >> 2); // Wait for the transmit buffer to be empty.
-
-	// TODO: Get the number of channel from HWDRVCHAR_CMDDEVRDY return value,
-	// TODO: and do not modify *dev if the number of channel is <= dev->chan ...
 
 	// Command HWDRVCHAR_CMDSETSPEED to retrieve
 	// the clock frequency used by the UART device.
@@ -89,9 +85,9 @@ static void hwdrvchar_init (hwdrvchar_t *dev, uintptr_t baudrate) {
 // Return the count of bytes that can be read
 // from the UART device without blocking.
 static inline uintptr_t hwdrvchar_readable (hwdrvchar_t *dev) {
+	void* addrDat = dev->addr;
+	void* addrCmd = (addrDat + sizeof(uintptr_t));
 	uintptr_t dat;
-	void* addrDat = dev->addr + (dev->chan * sizeof(uintptr_t));
-	void* addrCmd = (addrDat + 64);
 	// Command HWDRVCHAR_CMDGETBUFFERUSAGE to retrieve
 	// the number of bytes in the UART receive buffer.
 	// The encoding of a command and its argument
@@ -109,7 +105,7 @@ static inline uintptr_t hwdrvchar_readable (hwdrvchar_t *dev) {
 // argument ptr, the byte amount given by the argument sz.
 // Return the byte amount read.
 static uintptr_t hwdrvchar_read (hwdrvchar_t *dev, void *ptr, uintptr_t sz) {
-	void* addrDat = dev->addr + (dev->chan * sizeof(uintptr_t));
+	void* addrDat = dev->addr;
 	uintptr_t cnt = 0;
 	while (sz) {
 		uintptr_t n = hwdrvchar_readable(dev);
@@ -132,9 +128,9 @@ static uintptr_t hwdrvchar_read (hwdrvchar_t *dev, void *ptr, uintptr_t sz) {
 // Return the count of bytes that can be written
 // to the UART device without blocking.
 static inline uintptr_t hwdrvchar_writable (hwdrvchar_t *dev) {
+	void* addrDat = dev->addr;
+	void* addrCmd = (addrDat + sizeof(uintptr_t));
 	uintptr_t dat;
-	void* addrDat = dev->addr + (dev->chan * sizeof(uintptr_t));
-	void* addrCmd = (addrDat + 64);
 	// Command HWDRVCHAR_CMDGETBUFFERUSAGE to retrieve
 	// the number of bytes in the UART transmit buffer.
 	// The encoding of a command and its argument
@@ -152,7 +148,7 @@ static inline uintptr_t hwdrvchar_writable (hwdrvchar_t *dev) {
 // argument ptr, the byte amount given by the argument sz.
 // Return the byte amount written.
 static uintptr_t hwdrvchar_write (hwdrvchar_t *dev, void *ptr, uintptr_t sz) {
-	void* addrDat = dev->addr + (dev->chan * sizeof(uintptr_t));
+	void* addrDat = dev->addr;
 	uintptr_t cnt = 0;
 	while (sz) {
 		uintptr_t n = hwdrvchar_writable(dev);
@@ -178,9 +174,9 @@ static uintptr_t hwdrvchar_write (hwdrvchar_t *dev, void *ptr, uintptr_t sz) {
 // and its value is the receive buffer byte amount that will
 // trigger an interrupt.
 static inline void hwdrvchar_interrupt (hwdrvchar_t *dev, uintptr_t threshold) {
+	void* addrDat = dev->addr;
+	void* addrCmd = (addrDat + sizeof(uintptr_t));
 	uintptr_t dat;
-	void* addrDat = dev->addr + (dev->chan * sizeof(uintptr_t));
-	void* addrCmd = (addrDat + 64);
 	// Command HWDRVCHAR_CMDSETINTERRUPT to enable/disable interrupt.
 	// The encoding of a command and its argument
 	// is as follow: | arg: (ARCHBITSZ-2) bits | cmd: 2 bits |

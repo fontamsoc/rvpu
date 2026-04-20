@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-only
-// 20250414 (c) William Fonkou Tambe
+// 20260420 (c) William Fonkou Tambe
 
 #ifndef HWDRVGPIO_H
 #define HWDRVGPIO_H
@@ -24,7 +24,7 @@ typedef struct {
 // dev->iocnt gets set to the IO count.
 static inline void hwdrvgpio_configureio (hwdrvgpio_t *dev, uintptr_t arg) {
 	void* addrDat = dev->addr;
-	void* addrCmd = (addrDat + 64);
+	void* addrCmd = (addrDat + sizeof(uintptr_t));
 	uintptr_t dat;
 	do {
 		*(volatile uintptr_t *)addrCmd = ((arg<<1) | HWDRVGPIO_CMDCONFIGUREIO);
@@ -37,7 +37,7 @@ static inline void hwdrvgpio_configureio (hwdrvgpio_t *dev, uintptr_t arg) {
 // dev->clkfreq gets set to the clock frequency in Hz used by the device.
 static inline void hwdrvgpio_setdebounce (hwdrvgpio_t *dev, uintptr_t arg) {
 	void* addrDat = dev->addr;
-	void* addrCmd = (addrDat + 64);
+	void* addrCmd = (addrDat + sizeof(uintptr_t));
 	uintptr_t dat;
 	do {
 		*(volatile uintptr_t *)addrCmd = ((arg<<1) | HWDRVGPIO_CMDSETDEBOUNCE);
