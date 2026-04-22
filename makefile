@@ -16,7 +16,7 @@ stamps/prereq: ../${PROJ}
 	${SUDO} chown "${USER}" /opt/${PROJ}-toolchain
 	mkdir -p $(dir $@) && touch $@
 
-stamps/riscv-gnu-toolchain-build: ../${PROJ}/riscv-gnu-toolchain
+stamps/riscv-gnu-toolchain-build: ../${PROJ}/sw/riscv-gnu-toolchain
 	if [ ! -e $(notdir $@) ]; then mkdir -p $(notdir $@) && cd $(notdir $@) && \
 		${CURDIR}/$</configure --prefix=/opt/${PROJ}-toolchain --with-arch=rv32ima_zifencei_zicsr --with-abi=ilp32 --with-cmodel=medlow --enable-debug-info; fi
 	if [ -e $(notdir $@) ]; then cd $(notdir $@) && make -j${NPROC} newlib; fi
