@@ -13,8 +13,8 @@ Software toolchain includes libc with builtin RTOS named `_OS (underLineOS)` whi
 
 ## Get hw toolchain:
 
-	wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-09-15/oss-cad-suite-linux-x64-20250915.tgz
-	sudo tar -C /opt/ -xf oss-cad-suite-linux-x64-20250915.tgz
+	wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-12-04/oss-cad-suite-linux-x64-20251204.tgz
+	sudo tar -C /opt/ -xf oss-cad-suite-linux-x64-20251204.tgz
 	PATH="/opt/oss-cad-suite/bin:${PATH}"
 	sudo tee /etc/profile.d/fpga-toolchain.sh <<'EOF'
 	PATH="/opt/oss-cad-suite/bin:${PATH}"
@@ -34,7 +34,7 @@ A number of sample applications are available under `rvpu/hw/rv32-sim/apps/` alo
 
 Output:
 
-	rm -rf obj_dir *.vcd *.log
+	rm -rf obj_dir *.fst *.log
 	make TB=sim obj_dir/Vsim
 	make[1]: Entering directory '/tmp/rvpu/hw/rv32-sim'
 	verilator -cc --exe  \
@@ -47,28 +47,23 @@ Output:
 			-DSRAM_KBSIZE="(256/*KB*/)" \
 			sim.sv sim.cpp &>>build.log
 	make[1]: Leaving directory '/tmp/rvpu/hw/rv32-sim'
-	Fri Jan  2 07:42:46 PM CST 2026
+	Wed Apr 22 06:17:27 PM CDT 2026
 	apps/coremark/rv32/coremark.32.hex loaded
 	CoreMark @ 1000000 Hz
 	2K performance run parameters for coremark.
 	CoreMark Size    : 666
-	Total ticks      : 12503368
-	Total time (secs): 12.503368
-	Iterations/Sec   : 3.199138
+	Total ticks      : 12505487
+	Total time (secs): 12.505487
+	Iterations/Sec   : 3.198596
 	Iterations       : 40
 	Compiler version : GCC13.4.0
-	Compiler flags   : -O3 -DMULTITHREAD=4 -DUSE__OS=1 -DPERFORMANCE_RUN=1
-	Parallel threads : 1
+	Compiler flags   : -O3 -DMULTITHREAD=16 -DUSE__OS=1 -DPERFORMANCE_RUN=1
+	Parallel cores   : 1
 	Memory location  : HEAP
-	seedcrc          : 0xe9f5
-	[0]crclist       : 0xe714
-	[0]crcmatrix     : 0x1fd7
-	[0]crcstate      : 0x8e3a
-	[0]crcfinal      : 0x65c5
 	Correct operation validated. See readme.txt for run and reporting rules.
-	CoreMark 1.0 : 3.199138 / GCC13.4.0 -O3 -DMULTITHREAD=4 -DUSE__OS=1 -DPERFORMANCE_RUN=1 / HEAP / 1:threads
+	CoreMark 1.0 : 3.198596 / GCC13.4.0 -O3 -DMULTITHREAD=16 -DUSE__OS=1 -DPERFORMANCE_RUN=1 / HEAP / 1:cores
 	CoreMark done
-	- /tmp/rvpu/hw/rvxx/sys.pu.v:227: Verilog $finish
+	- /tmp/rvpu/hw/rvxx/sys.pu.sv:227: Verilog $finish
 
 ### > App smp_pi using 4 cores:
 
@@ -78,7 +73,7 @@ Output:
 
 Output:
 
-	rm -rf obj_dir *.vcd *.log
+	rm -rf obj_dir *.fst *.log
 	make TB=sim obj_dir/Vsim
 	make[1]: Entering directory '/tmp/rvpu/hw/rv32-sim'
 	verilator -cc --exe  \
@@ -91,7 +86,7 @@ Output:
 			-DSRAM_KBSIZE="(256/*KB*/)" \
 			sim.sv sim.cpp &>>build.log
 	make[1]: Leaving directory '/tmp/rvpu/hw/rv32-sim'
-	Fri Jan  2 07:49:33 PM CST 2026
+	Wed Apr 22 06:20:40 PM CDT 2026
 	apps/smp_pi/smp_pi.32.hex loaded
 	Calculate first 240 digits of Pi independently by 16 threads.
 	Pi value calculated by thread #0: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
@@ -111,7 +106,7 @@ Output:
 	Pi value calculated by thread #14: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	Pi value calculated by thread #15: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	All 16 threads executed by 4 cores in 80 ms
-	- /tmp/rvpu/hw/rvxx/sys.pu.v:227: Verilog $finish
+	- /tmp/rvpu/hw/rvxx/sys.pu.sv:227: Verilog $finish
 
 ### > App tinyraytracer using 4 cores:
 
@@ -132,6 +127,16 @@ Output:
 Output:
 
 [![asciicast](https://asciinema.org/a/IDh0X0zmR3x50dskrxjresdN7.svg)](https://asciinema.org/a/IDh0X0zmR3x50dskrxjresdN7)
+
+## Trace signals using verilator simulator
+
+Generate signal traces that can be viewed using GTKWave using `sim_trace` instead of `sim` make target,
+and setting `TRACE_BEGIN=` (and optionally `TRACE_LEN=`):
+
+	cd rvpu/hw/rv32-sim/
+	make clean sim_trace run SRAM_INITFILE=apps/helloworld/helloworld.32.hex TRACE_BEGIN=100 TRACE_LEN=2000
+	gtkwave sim.fst
+	cd -
 
 ## Run application on FPGA
 
