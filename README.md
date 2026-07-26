@@ -24,7 +24,7 @@ Software toolchain includes libc with builtin RTOS named `_OS (underLineOS)` whi
 
 A number of sample applications are available under `rvpu/hw/rv32-sim/apps/` along with their prebuilt .hex file:
 
-	coremark  donut  helloworld  isatests  isatests2  smp_pi  thrdtst  tinyraytracer
+	coremark  donut  helloworld  isatests  smp_pi  thrdtst  tinyraytracer
 
 ### > App coremark using 1 MHz clock frequency:
 
@@ -35,34 +35,37 @@ A number of sample applications are available under `rvpu/hw/rv32-sim/apps/` alo
 Output:
 
 	rm -rf obj_dir *.fst *.log
-	make TB=sim obj_dir/Vsim
 	make[1]: Entering directory '/tmp/rvpu/hw/rv32-sim'
-	verilator -cc --exe  \
-			--x-assign 1 --x-initial-edge \
-			--relative-includes -I.. -Wno-lint \
-			-DCLKFREQ=1000000 \
-			-DCPU_COUNT=1 \
-			-DXWORDBITSZ=32 \
-			-DSRAM_INITFILE='"apps/coremark/rv32/coremark.32.hex"' \
-			-DSRAM_KBSIZE="(256/*KB*/)" \
-			sim.sv sim.cpp &>>build.log
+	verilator -cc --exe --x-assign 1 --x-initial-edge \
+		--relative-includes -I.. -Wno-lint \
+		-DCLKFREQ=1000000 \
+		-DCPU_COUNT=1 \
+		-DXWORDBITSZ=32 \
+		-DSRAM_INITFILE='"apps/coremark/rv32/coremark.32.hex"' \
+		-DSRAM_KBSIZE="(256/*KB*/)" \
+		sim.sv sim.cpp &>>build.log
 	make[1]: Leaving directory '/tmp/rvpu/hw/rv32-sim'
-	Mon May 25 01:00:37 PM CDT 2026
+	Sun Jul 26 05:08:30 PM CDT 2026
 	apps/coremark/rv32/coremark.32.hex loaded
 	CoreMark @ 1000000 Hz
 	2K performance run parameters for coremark.
-	Total ticks      : 16432242
-	Total time (secs): 16.432242
-	Iterations/Sec   : 3.651358
+	Total ticks      : 14872319
+	Total time (secs): 14.872319
+	Iterations/Sec   : 4.034341
 	Iterations       : 60
 	Compiler version : GCC16.1.0
 	Compiler flags   : -O3 -DMULTITHREAD=16 -DUSE__OS=1 -DPERFORMANCE_RUN=1
 	Parallel cores   : 1
 	Memory location  : HEAP
 	Correct operation validated. See readme.txt for run and reporting rules.
-	CoreMark 1.0 : 3.651358 / GCC16.1.0 -O3 -DMULTITHREAD=16 -DUSE__OS=1 -DPERFORMANCE_RUN=1 / HEAP / 1:cores
+	CoreMark 1.0 : 4.034341 / GCC16.1.0 -O3 -DMULTITHREAD=16 -DUSE__OS=1 -DPERFORMANCE_RUN=1 / HEAP / 1:cores
+	CoreMark/MHz : 4.034341
 	CoreMark done
-	- /tmp/rvpu/hw/rvxx/sys.pu.sv:227: Verilog $finish
+	- /tmp/rvpu/hw/rvxx/sys.pu.sv:231: Verilog $finish
+
+	real	0m9.453s
+	user	0m9.446s
+	sys	0m0.000s
 
 ### > App smp_pi using 4 cores:
 
@@ -73,19 +76,17 @@ Output:
 Output:
 
 	rm -rf obj_dir *.fst *.log
-	make TB=sim obj_dir/Vsim
 	make[1]: Entering directory '/tmp/rvpu/hw/rv32-sim'
-	verilator -cc --exe  \
-			--x-assign 1 --x-initial-edge \
-			--relative-includes -I.. -Wno-lint \
-			-DCLKFREQ=100000000 \
-			-DCPU_COUNT=4 \
-			-DXWORDBITSZ=32 \
-			-DSRAM_INITFILE='"apps/smp_pi/smp_pi.32.hex"' \
-			-DSRAM_KBSIZE="(256/*KB*/)" \
-			sim.sv sim.cpp &>>build.log
+	verilator -cc --exe --x-assign 1 --x-initial-edge \
+		--relative-includes -I.. -Wno-lint \
+		-DCLKFREQ=100000000 \
+		-DCPU_COUNT=4 \
+		-DXWORDBITSZ=32 \
+		-DSRAM_INITFILE='"apps/smp_pi/smp_pi.32.hex"' \
+		-DSRAM_KBSIZE="(256/*KB*/)" \
+		sim.sv sim.cpp &>>build.log
 	make[1]: Leaving directory '/tmp/rvpu/hw/rv32-sim'
-	Mon May 25 01:02:39 PM CDT 2026
+	Sun Jul 26 05:09:00 PM CDT 2026
 	apps/smp_pi/smp_pi.32.hex loaded
 	Calculate first 240 digits of Pi independently by 16 threads.
 	Pi value calculated by thread #0: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
@@ -104,8 +105,12 @@ Output:
 	Pi value calculated by thread #13: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	Pi value calculated by thread #14: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	Pi value calculated by thread #15: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
-	All 16 threads executed by 4 cores in 47 ms
-	- /tmp/rvpu/hw/rvxx/sys.pu.sv:227: Verilog $finish
+	All 16 threads executed by 4 cores in 18 ms
+	- /tmp/rvpu/hw/rvxx/sys.pu.sv:231: Verilog $finish
+
+	real	0m7.603s
+	user	0m7.588s
+	sys	0m0.000s
 
 ### > App tinyraytracer using 4 cores:
 
@@ -115,7 +120,7 @@ Output:
 
 Output:
 
-[![asciicast](https://asciinema.org/a/GIQaF4uvYTIRVMu7CEvh4jsJf.svg)](https://asciinema.org/a/GIQaF4uvYTIRVMu7CEvh4jsJf)
+[![asciicast](https://asciinema.org/a/UIcnlQwMG7LbE2BC.svg)](https://asciinema.org/a/UIcnlQwMG7LbE2BC)
 
 ### > App donut:
 
@@ -125,7 +130,7 @@ Output:
 
 Output:
 
-[![asciicast](https://asciinema.org/a/IDh0X0zmR3x50dskrxjresdN7.svg)](https://asciinema.org/a/IDh0X0zmR3x50dskrxjresdN7)
+[![asciicast](https://asciinema.org/a/4CVBZtxyRuiCEO0z.svg)](https://asciinema.org/a/4CVBZtxyRuiCEO0z)
 
 ## Trace signals using verilator simulator
 
