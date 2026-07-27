@@ -63,10 +63,6 @@ Output:
 	CoreMark done
 	- /tmp/rvpu/hw/rvxx/sys.pu.sv:231: Verilog $finish
 
-	real	0m9.453s
-	user	0m9.446s
-	sys	0m0.000s
-
 ### > App smp_pi using 4 cores:
 
 	cd rvpu/hw/rv32-sim/
@@ -107,10 +103,6 @@ Output:
 	Pi value calculated by thread #15: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	All 16 threads executed by 4 cores in 18 ms
 	- /tmp/rvpu/hw/rvxx/sys.pu.sv:231: Verilog $finish
-
-	real	0m7.603s
-	user	0m7.588s
-	sys	0m0.000s
 
 ### > App tinyraytracer using 4 cores:
 
