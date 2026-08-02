@@ -18,23 +18,23 @@
 //
 // The description of commands is as follow:
 // 	CMDDEVRDY: Make the controller accept a new command.
-// 	"resp" in the result get set to 0.
+// 	"resp" in the result gets set to 0.
 // 	CMDACKIRQ: Acknowledges an interrupt source; field "arg" is expected
 // 	to have following format | idx: (WORDBITSZ-3) bits | en: 1 bit |
-// 	where "idx" is the interrupt destination index, "en" enable/disable
+// 	where "idx" is the interrupt destination index, "en" enables/disables
 // 	further interrupt delivery to the interrupt destination "idx".
-// 	"resp" in the result get set to the interrupt source index, or -2
-// 	if there are no pending interrupt for the destination "idx", or -1
+// 	"resp" in the result gets set to the interrupt source index, or -2
+// 	if there are no pending interrupts for the destination "idx", or -1
 // 	for an interrupt triggered by CMDINTDST.
 // 	CMDINTDST: Triggers an interrupt targeting a specific destination;
 // 	the field "arg" is the index of the interrupt destination to target,
-// 	while "resp" in the result get set to the interrupt destination index
+// 	while "resp" in the result gets set to the interrupt destination index
 // 	if valid, -2 if not ready due to an interrupt pending ack, or -1 if invalid.
 // 	CMDENAIRQ: Enable/Disable an interrupt source; field "arg" is expected
-// 	to have following format | idx: (WORDBITSZ-3) bits | en: 1 bit|
-// 	where "idx" is the interrupt source index, "en" enable/disable
+// 	to have following format | idx: (WORDBITSZ-3) bits | en: 1 bit |
+// 	where "idx" is the interrupt source index, "en" enables/disables
 // 	interrupts from the interrupt source "idx".
-// 	"resp" in the result get set to the interrupt source index, or -1
+// 	"resp" in the result gets set to the interrupt source index, or -1
 // 	if invalid.
 //
 // To be multi core proof, an atomic read-write must be used to send
