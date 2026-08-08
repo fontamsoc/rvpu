@@ -4,7 +4,7 @@ on:
     - '*'
   workflow_dispatch:
 
-name: rvpu-toolchain
+name: ftpu-toolchain
 
 permissions: write-all
 
@@ -22,9 +22,9 @@ jobs:
         run: |
           sudo ln -snf /bin/bash /bin/sh
           sudo mount --bind /${PWD} /opt/
-          mkdir rvpu-build
-          make USETAR=1 -C rvpu-build/ -f ../rvpu/makefile all > rvpu/build.log
-          mv rvpu-build/rvpu-toolchain.tar.xz rvpu/rvpu-toolchain-linux-x64.tar.xz
+          mkdir ftpu-build
+          make USETAR=1 -C ftpu-build/ -f ../ftpu/makefile all > ftpu/build.log
+          mv ftpu-build/ftpu-toolchain.tar.xz ftpu/ftpu-toolchain-linux-x64.tar.xz
       - name: Save build.log
         uses: actions/upload-artifact@v4
         with:
@@ -35,4 +35,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            rvpu-toolchain-linux-x64.tar.xz
+            ftpu-toolchain-linux-x64.tar.xz

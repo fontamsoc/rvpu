@@ -8,8 +8,8 @@ Software toolchain includes libc with builtin RTOS named `_OS (underLineOS)` whi
 
 ## Get project:
 
-	git clone https://github.com/fontamsoc/rvpu.git
-	git -C rvpu/ submodule update --init
+	git clone https://github.com/fontamsoc/ftpu.git
+	git -C ftpu/ submodule update --init
 
 ## Get hw toolchain:
 
@@ -22,20 +22,20 @@ Software toolchain includes libc with builtin RTOS named `_OS (underLineOS)` whi
 
 ## Run application using verilator simulator
 
-A number of sample applications are available under `rvpu/hw/rv32-sim/apps/` along with their prebuilt .hex file:
+A number of sample applications are available under `ftpu/hw/rv32-sim/apps/` along with their prebuilt .hex file:
 
 	coremark  donut  helloworld  isatests  smp_pi  thrdtst  tinyraytracer
 
 ### > App coremark using 1 MHz clock frequency:
 
-	cd rvpu/hw/rv32-sim/
+	cd ftpu/hw/rv32-sim/
 	make clean sim run SRAM_INITFILE=apps/coremark/rv32/coremark.32.hex CLKFREQ=1000000
 	cd -
 
 Output:
 
 	rm -rf obj_dir *.fst *.log
-	make[1]: Entering directory '/tmp/rvpu/hw/rv32-sim'
+	make[1]: Entering directory '/tmp/ftpu/hw/rv32-sim'
 	verilator -cc --exe --x-assign 1 --x-initial-edge \
 		--relative-includes -I.. -Wno-lint \
 		-DCLKFREQ=1000000 \
@@ -44,7 +44,7 @@ Output:
 		-DSRAM_INITFILE='"apps/coremark/rv32/coremark.32.hex"' \
 		-DSRAM_KBSIZE="(256/*KB*/)" \
 		sim.sv sim.cpp &>>build.log
-	make[1]: Leaving directory '/tmp/rvpu/hw/rv32-sim'
+	make[1]: Leaving directory '/tmp/ftpu/hw/rv32-sim'
 	Sun Jul 26 05:08:30 PM CDT 2026
 	apps/coremark/rv32/coremark.32.hex loaded
 	CoreMark @ 1000000 Hz
@@ -61,18 +61,18 @@ Output:
 	CoreMark 1.0 : 4.034341 / GCC16.1.0 -O3 -DMULTITHREAD=16 -DUSE__OS=1 -DPERFORMANCE_RUN=1 / HEAP / 1:cores
 	CoreMark/MHz : 4.034341
 	CoreMark done
-	- /tmp/rvpu/hw/rvxx/sys.pu.sv:231: Verilog $finish
+	- /tmp/ftpu/hw/rvxx/sys.pu.sv:231: Verilog $finish
 
 ### > App smp_pi using 4 cores:
 
-	cd rvpu/hw/rv32-sim/
+	cd ftpu/hw/rv32-sim/
 	make clean sim run SRAM_INITFILE=apps/smp_pi/smp_pi.32.hex CPU_COUNT=4
 	cd -
 
 Output:
 
 	rm -rf obj_dir *.fst *.log
-	make[1]: Entering directory '/tmp/rvpu/hw/rv32-sim'
+	make[1]: Entering directory '/tmp/ftpu/hw/rv32-sim'
 	verilator -cc --exe --x-assign 1 --x-initial-edge \
 		--relative-includes -I.. -Wno-lint \
 		-DCLKFREQ=100000000 \
@@ -81,7 +81,7 @@ Output:
 		-DSRAM_INITFILE='"apps/smp_pi/smp_pi.32.hex"' \
 		-DSRAM_KBSIZE="(256/*KB*/)" \
 		sim.sv sim.cpp &>>build.log
-	make[1]: Leaving directory '/tmp/rvpu/hw/rv32-sim'
+	make[1]: Leaving directory '/tmp/ftpu/hw/rv32-sim'
 	Sun Jul 26 05:09:00 PM CDT 2026
 	apps/smp_pi/smp_pi.32.hex loaded
 	Calculate first 240 digits of Pi independently by 16 threads.
@@ -102,11 +102,11 @@ Output:
 	Pi value calculated by thread #14: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	Pi value calculated by thread #15: 314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316
 	All 16 threads executed by 4 cores in 18 ms
-	- /tmp/rvpu/hw/rvxx/sys.pu.sv:231: Verilog $finish
+	- /tmp/ftpu/hw/rvxx/sys.pu.sv:231: Verilog $finish
 
 ### > App tinyraytracer using 4 cores:
 
-	cd rvpu/hw/rv32-sim/
+	cd ftpu/hw/rv32-sim/
 	make clean sim run SRAM_INITFILE=apps/tinyraytracer/tinyraytracer.32.hex CPU_COUNT=4
 	cd -
 
@@ -116,7 +116,7 @@ Output:
 
 ### > App donut:
 
-	cd rvpu/hw/rv32-sim/
+	cd ftpu/hw/rv32-sim/
 	make clean sim run SRAM_INITFILE=apps/donut/donut.32.hex
 	cd -
 
@@ -129,20 +129,20 @@ Output:
 Generate signal traces that can be viewed using GTKWave using `sim_trace` instead of `sim` make target,
 and setting `TRACE_BEGIN=` (and optionally `TRACE_LEN=`):
 
-	cd rvpu/hw/rv32-sim/
+	cd ftpu/hw/rv32-sim/
 	make clean sim_trace run SRAM_INITFILE=apps/helloworld/helloworld.32.hex TRACE_BEGIN=100 TRACE_LEN=2000
 	gtkwave sim.fst
 	cd -
 
 ## Run application on FPGA
 
-FPGA support is available under `rvpu/hw/`:
+FPGA support is available under `ftpu/hw/`:
 
 	rv32-artya7100  rv32-nexysa7100  rv32-orangecrab0285
 
 The easiest FPGA support to work with is the `rv32-orangecrab0285` because its sram can be updated without rebuilding the bitstream:
 
-	cd rvpu/hw/rv32-orangecrab0285/yosys/
+	cd ftpu/hw/rv32-orangecrab0285/yosys/
 	make updsram SRAM_INITFILE=../../rv32-sim/apps/coremark/rv32/coremark.32.hex
 	# While holding the button on the OrangeCrab, plug it in;
 	# it enters the bootloader and enables programming a new bitstream.
@@ -153,25 +153,25 @@ Set `SRAM_INITFILE` of `make updsram` to a different .hex to use a different app
 
 To rebuild the `rv32-orangecrab0285` bitstream, use `make clean all`.
 
-The bitstreams for the xilinx FPGAs, such as `rv32-artya7100`, need to be built from their Vivado project file (ie: `rvpu/hw/rv32-artya7100/vivado2020/artya7100.xpr`).
+The bitstreams for the xilinx FPGAs, such as `rv32-artya7100`, need to be built from their Vivado project file (ie: `ftpu/hw/rv32-artya7100/vivado2020/artya7100.xpr`).
 
-## Build sw toolchain (or [download prebuilt](https://github.com/fontamsoc/rvpu/releases/latest/download/rvpu-toolchain-linux-x64.tar.xz) [![pu32-toolchain](https://github.com/fontamsoc/rvpu/actions/workflows/release.yml/badge.svg)](https://github.com/fontamsoc/rvpu/actions/workflows/release.yml))
+## Build sw toolchain (or [download prebuilt](https://github.com/fontamsoc/ftpu/releases/latest/download/ftpu-toolchain-linux-x64.tar.xz) [![pu32-toolchain](https://github.com/fontamsoc/ftpu/actions/workflows/release.yml/badge.svg)](https://github.com/fontamsoc/ftpu/actions/workflows/release.yml))
 
 Only needed in order to build software.
 
 	sudo ln -snf /bin/bash /bin/sh
-	mkdir rvpu-build && cd rvpu-build
-	make -f ../rvpu/makefile clean all
+	mkdir ftpu-build && cd ftpu-build
+	make -f ../ftpu/makefile clean all
 
-The toolchain gets generated under `/opt/rvpu-toolchain/`.
+The toolchain gets generated under `/opt/ftpu-toolchain/`.
 
 ### > Install sw toolchain if using downloaded prebuilt
 
-	sudo tar -xf rvpu-toolchain-linux-x64.tar.xz -C /opt/
+	sudo tar -xf ftpu-toolchain-linux-x64.tar.xz -C /opt/
 
 ### > Setup sw toolchain
 
-	PATH="/opt/rvpu-toolchain/bin:${PATH}"
-	sudo tee /etc/profile.d/rvpu-toolchain.sh <<'EOF'
-	PATH="/opt/rvpu-toolchain/bin:${PATH}"
+	PATH="/opt/ftpu-toolchain/bin:${PATH}"
+	sudo tee /etc/profile.d/ftpu-toolchain.sh <<'EOF'
+	PATH="/opt/ftpu-toolchain/bin:${PATH}"
 	EOF

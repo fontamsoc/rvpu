@@ -5,7 +5,7 @@ NPROC ?= $(shell nproc)
 
 SUDO := $(shell test $$(id -u) -eq 0 || echo -n sudo)
 
-PROJ := rvpu
+PROJ := ftpu
 
 .PHONY: all
 all: ${PROJ}-toolchain.tar.xz
